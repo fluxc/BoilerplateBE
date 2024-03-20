@@ -18,8 +18,8 @@ export class UsersResolver {
   }
 
   @Query(() => UserType)
-  getUser(@Args('uuid') uuid: string) {
-    return this.usersService.getUserById(uuid);
+  getUser(@GetUser() user: User) {
+    return this.usersService.getUserById(user.uuid);
   }
 
   @Mutation(() => UserType)

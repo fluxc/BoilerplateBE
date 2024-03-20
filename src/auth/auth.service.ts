@@ -5,7 +5,7 @@ import { AuthCredentialsInput } from './dto/auth.input';
 import { UsersService } from 'src/user/user.service';
 import { User } from 'src/schemas/user.schema';
 import { JwtPayload } from './interfaces/jwtPayload.interface';
-import { TokenType } from './type/auth.type';
+import { LoginResponseType } from './type/login.type';
 
 @Injectable()
 export class AuthService {
@@ -14,7 +14,9 @@ export class AuthService {
     private userService: UsersService,
   ) {}
 
-  async signIn(authCredentialsInput: AuthCredentialsInput): Promise<TokenType> {
+  async signIn(
+    authCredentialsInput: AuthCredentialsInput,
+  ): Promise<LoginResponseType> {
     const { email, password } = authCredentialsInput;
     const user = await this.userService.findUserByEmail(email);
 
@@ -34,7 +36,7 @@ export class AuthService {
     await this.userService.handleSuccessfulLogin(user);
 
     const accessToken = await this.createToken(user);
-    return { token: accessToken };
+    return { token: accessToken, user };
   }
 
   async validateUser(payload: JwtPayload): Promise<any> {
